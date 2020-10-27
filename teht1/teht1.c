@@ -6,10 +6,17 @@
 
 int main(int argc, char *argv[])
 {
-  printf("Annoit ohjelman nimen perässä %d komentoriviargumenttia\n", (argc - 1));
+  int arglkm = argc - 1;
+  if(arglkm == 0){
+    printf("Et antanut yhtään komentoriviargumenttia.\n");
+    printf("Ohjelman nimi on %s\n", argv[0]);
+  } else {
+    printf("Annoit ohjelman nimen perässä %d komentoriviargumenttia\n", (arglkm));
 
-  for (int i = (argc - 1); i > -1; i--) {
-    printf("argv[%d]: %s\n", i, argv[i]);
+    for (int i = (arglkm); i > -1; i--) {
+      printf("argv[%d]: %s\n", i, argv[i]);
+    }
   }
+
   return 0;
 }
