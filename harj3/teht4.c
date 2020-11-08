@@ -19,10 +19,19 @@ int main(int argc, char *argv[]) {
   DIR* dirhandle1 = opendir(dirname1);
   DIR* dirhandle2 = opendir(dirname2);
 
+  if(dirhandle1 == NULL || dirhandle2 == NULL) {
+    perror("Error: ");
+    exit(EXIT_FAILURE);
+  }
+
   struct dirent *file;
   while ((file = readdir(dirhandle2)) != NULL) {
-    if(searchFilename(dirhandle1, file->d_name)) {
-      printf("File %s is present in both directories.\n", file->d_name);
+    // Check only actual files, not "." and ".."
+    if (strcmp(file->d_name, ".") && strcmp(file->d_name, "..")) {
+
+      if (searchFilename(dirhandle1, file->d_name)) {
+        printf("File %s is present in both directories.\n", file->d_name);
+      }
     }
 
   }
@@ -31,6 +40,8 @@ int main(int argc, char *argv[]) {
 
 int searchFilename(DIR* dirhandle, char* str)
 {
+
+  rewinddir(dirhandle);
 
   struct dirent *file;
   while((file = readdir(dirhandle)) != NULL) {
