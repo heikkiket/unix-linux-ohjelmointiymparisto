@@ -29,18 +29,22 @@ int main(int argc, char *argv[])
   stat(file2, &stats);
   printf("%s %lld bytes\n\n", file2, (long long)stats.st_size);
 
-  while(readnext(handle1, handle2) != -1) {
+  int readres;
+  while((readres = readnext(handle1, handle2)) > 0 ) {
     if(res1[0] != res2[0]) {
       printf("Files differ at char %d\n", filepos);
+
       printf("Char at that point is\n");
-      printf("%s:\n %s\n%s:\n %s\n", file1, res1, file2, res2);
+      printf("%s:\n \"%s\"\n%s:\n \"%s\"\n", file1, res1, file2, res2);
+
       exit(EXIT_SUCCESS);
     }
 
-
   }
-
-  printf("Files were similar!\n");
+  if(readres == 0)
+    printf("Files differ at length\n");
+  else
+    printf("Files were similar!\n");
 
   return 0;
 }
@@ -70,8 +74,11 @@ int readnext(int handle1, int handle2)
 
   filepos++;
 
-  if(r1 == 0 || r2 == 0)
+  if (r1 == 0 && r2 == 0)
     return -1;
+
+  if(r1 == 0 || r2 == 0)
+    return 0;
 
   return 1;
 }

@@ -23,9 +23,14 @@ int main(int argc, char *argv[])
 
   char number[6];
   while((read(STDIN_FILENO, number, 5)) != 0) {
-    write(handle, number, 5);
+    char * ptr = number;
+    while(*ptr != '\0'){
+      write(handle, ptr, 1);
+      ptr++;
+    }
+
   }
-  write(handle, "\n", 1);
+  write(handle, '\0', 1);
 
   return 0;
 }
